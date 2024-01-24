@@ -95,7 +95,6 @@ Pygments
 python-dateutil 
 python-dotenv==1.0.1
 pytz==2023.3.post1
-pywin32==227
 PyYAML==6.0.1
 pyzmq 
 rank-bm25==0.2.2
