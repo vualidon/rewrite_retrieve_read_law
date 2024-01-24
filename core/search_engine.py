@@ -10,7 +10,7 @@ load_dotenv()
 from rank_bm25 import BM25Okapi
 # from trafilatura import fetch_url, extract
 from newspaper import Article
-from text_generation import generate_queries, response_gemini
+from text_generation import generate_queries, response_gemini, classification_question, response_without_context
 
 
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
@@ -65,12 +65,22 @@ def get_paragraphs(url):
     except:
         return []
     
-def rrr_pages(query, n=20):
+def rrr_pages(query, history="", n=20):
     """
     use google search to retrieve pages
     then get paragraphs from those pages
     finally, calculate bm25 scores for each paragraph
     """
+    conversations = ""
+    if history != "":
+        # query = history + " " + query
+        for item in history:
+            conversations += f"{item['role']}: {item['content']}\n"
+    print(conversations)
+    classify_status = classification_question(query)
+    print(classify_status)
+    if "NO" in classify_status:
+        return response_without_context(question=query, history=conversations)
     questions = generate_queries(question=query)
     questions = [q.strip() for q in questions.split(";")]
     print(questions)
@@ -93,7 +103,7 @@ def rrr_pages(query, n=20):
     docs = "\n\n".join(bm25_results)
 
     print(docs)
-    return response_gemini(question=query, context=docs)
+    return response_gemini(question=query, context=docs, history=conversations)
 
 if __name__=="__main__":
 

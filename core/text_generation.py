@@ -28,6 +28,23 @@ gemini_api_key = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=gemini_api_key)
 model = genai.GenerativeModel('gemini-pro')
 
+def classification_question(question):
+    try:
+        prompt = f"""
+        You are a helpful assistant. Your mission is to classify that the question is about law, rule or not.
+        If the question is about law or rule, you have to answer "YES".
+        If the question is not about law or rule, you have to answer "NO".
+        Question: {question}
+        Classify:
+        """
+        response = model.generate_content(prompt)
+        return response.candidates[0].content.parts[0].text
+    except Exception as e:
+        print(e)
+        return "Xin lỗi, hiện tại tôi không thể trả lời câu hỏi này. Đã có lỗi xảy ra khi thực hiện trả lời câu hỏi."
+
+# print(classification_question("xin chào, bạn tên gì?"))
+
 def generate_queries(question):
     tokenizer = AutoTokenizer.from_pretrained("thangvip/vi-t5-rewriter-rlhf")
     model_rewrite = AutoModelForSeq2SeqLM.from_pretrained("thangvip/vi-t5-rewriter-rlhf")
@@ -35,6 +52,33 @@ def generate_queries(question):
     input_ids = tokenizer(question, return_tensors="pt").input_ids
     outputs = model_rewrite.generate(input_ids)
     return tokenizer.decode(outputs[0], skip_special_tokens=True, clean_up_tokenization_spaces=True)
+
+def response_without_context(question, history=""):
+    try:
+        completed_prompt = f"""\
+        #ROLE
+        You are a helpful assistant, your name are "LAWLINKER".
+        Your job is to answer questions about law base on your knowledge and context given.
+
+        #INSTRUCTION
+        You are given history (optional) and a question.
+        If history is given, you should consider it as a part of context.
+        When you can answer the question, also provide the source of your answer.
+
+        #QUESTION
+        {question}
+
+        #HISTORY
+        {history}
+
+        #ANSWER
+        """
+        response = model.generate_content(completed_prompt)
+        return response.candidates[0].content.parts[0].text
+    # return 
+    except Exception as e:
+        print(e)
+        return "Xin lỗi, hiện tại tôi không thể trả lời câu hỏi này. Đã có lỗi xảy ra khi thực hiện trả lời câu hỏi."
 
 def response_gemini(question, context="", history=""):
     try:
