@@ -1,47 +1,31 @@
-import streamlit as st
-import os
 from search_engine import rrr_snippets, rrr_pages
-# App title
-st.set_page_config(page_title="💬 LawLinker Chatbot")
+from datasets import load_dataset
+import pandas as pd
+# ds = load_dataset("thangvip/data-compare", split='train')
+# ds = ds.shuffle(seed=42)
+# data = {
+#     "question": [],
+#     "answer_bot": [],
+#     "real_label": []
+# }
+# for index, item in enumerate(ds):
+#     if index >= 500 and index < 550:
+        # try:
+        #     data["question"].append(item['question'])
+        #     data["answer_bot"].append(rrr_pages(item['question'], n=10))
+        #     data["real_label"].append(item['content'])
+        # except:
+        #     print("ERROR")
 
-# Replicate Credentials
-with st.sidebar:
-    st.title('💬 LawLinker Chatbot')
-    "Trợ lý ảo hỗ trợ trả lời các câu hỏi về pháp luật ✅"
-    "Core engine sử dụng Gemini Pro của Google"
-# Store LLM generated responses
-if "messages" not in st.session_state.keys():
-    st.session_state.messages = [{"role": "assistant", "content": "Xin chào, tôi có thể giúp gì cho bạn?"}]
+        # print(index)
+        # print(item['question'])
+        # print( item['content'])
+        # print("ANSWER: \n",rrr_pages(item['question'], n=10))
+        # break
+question = """Tôi có thắc mắc: Người phụ trách kinh doanh dịch vụ lữ hành đã có chứng chỉ nghiệp vụ điều hành du lịch nội địa thì có thể kinh doanh dịch vụ lữ hành quốc tế hay không? (Câu hỏi của anh Quyền - Đồng Nai)"""
 
-# Display or clear chat messages
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.write(message["content"])
+# data = pd.DataFrame(data)
 
-def clear_chat_history():
-    st.session_state.messages = [{"role": "assistant", "content": "Xin chào, tôi có thể giúp gì cho bạn?"}]
-st.sidebar.button('Clear Chat History', on_click=clear_chat_history)
-
-# Function for generating LLaMA2 response
-
-# User-provided prompt
-if prompt := st.chat_input():
-    st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
-        st.write(prompt)
-
-# Generate a new response if last message is not from assistant
-if st.session_state.messages[-1]["role"] != "assistant":
-    with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
-            full_response = rrr_pages(prompt, history=st.session_state.messages, n=10)
-            st.write(full_response)
-        #     response = rrr_pages(prompt, n=10)
-        #     placeholder = st.empty()
-        #     full_response = ''
-        #     for item in response:
-        #         full_response += item
-        #         placeholder.markdown(full_response)
-        #     placeholder.markdown(full_response)
-    message = {"role": "assistant", "content": full_response}
-    st.session_state.messages.append(message)
+# data.to_excel("test_result.
+# xlsx", index=False)
+print("ANSWER: \n",rrr_pages(question, n=10))

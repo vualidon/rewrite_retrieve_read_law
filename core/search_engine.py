@@ -56,7 +56,7 @@ def get_paragraphs(url):
         for para in paragraphs:
             previous += " " + para
             if len(previous.split(" ")) > 50:
-                new_paragraphs.append(previous)
+                new_paragraphs.append(f"SOURCE: {url}\n"+previous)
                 previous = ""
 
         return new_paragraphs
