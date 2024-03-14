@@ -33,7 +33,7 @@ if prompt := st.chat_input():
 if st.session_state.messages[-1]["role"] != "assistant":
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
-            full_response = rrr_pages(prompt, history=st.session_state.messages, n=10)
+            full_response = rrr_pages(prompt, history=st.session_state.messages, n=20)
             st.write(full_response)
         #     response = rrr_pages(prompt, n=10)
         #     placeholder = st.empty()

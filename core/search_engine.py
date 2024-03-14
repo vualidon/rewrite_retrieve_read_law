@@ -58,6 +58,8 @@ def get_paragraphs(url):
             if len(previous.split(" ")) > 50:
                 new_paragraphs.append(f"SOURCE: {url}\n"+previous)
                 previous = ""
+        if previous != "":
+            new_paragraphs.append(f"SOURCE: {url}\n"+previous)
 
         return new_paragraphs
         # if article is not None:

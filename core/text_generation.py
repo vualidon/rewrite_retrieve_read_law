@@ -63,6 +63,7 @@ def response_without_context(question, history=""):
         #INSTRUCTION
         You are given history (optional) and a question.
         If history is given, you should consider it as a part of context.
+        Your answer always be clear and detailed.
         When you can answer the question, also provide the source of your answer.
 
         #QUESTION
@@ -93,6 +94,7 @@ def response_gemini(question, context="", history=""):
         you have to response: "Xin lỗi, hiện tại tôi không thể trả lời câu hỏi này".
         If history is given, you should consider it as a part of context.
         When you can answer the question, also provide the source of your answer.
+        Your answer always be clear and detailed.
         The source should be summarized in 1-2 sentences.
 
         #CONTEXT
